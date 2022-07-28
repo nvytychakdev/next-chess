@@ -1,6 +1,4 @@
 import { FC, useState } from "react";
-import { useBoard } from "../hooks/useBoard";
-import { useDrag } from "../hooks/useDrag";
 import { usePlayer } from "../hooks/usePlayer";
 import { Square } from "../models";
 import { Piece } from "../models/piece";
@@ -12,6 +10,14 @@ const ChessBoard: FC<{ board: Square[][] }> = ({ board }) => {
   const { player, togglePlayer, setPlayer } = usePlayer();
   const [activeSquare, setActiveSquare] = useState<Square | null>(null);
 
+  /**
+   * Square Click.
+   * TODO: Rename, split into multiple methods checking active piece behaviors.
+   *
+   * @param board
+   * @param square
+   * @returns
+   */
   const onSquareClick = (board: Square[][], square: Square): void => {
     console.log("Selected square", square);
 
@@ -46,6 +52,13 @@ const ChessBoard: FC<{ board: Square[][] }> = ({ board }) => {
     }
   };
 
+  /**
+   * Pieces movement from start to end square.
+   *
+   * @param piece
+   * @param start
+   * @param end
+   */
   const movePiece = (piece: Piece, start: Square, end: Square): void => {
     console.log(`Move ${piece} from ${start} to ${end}`);
 

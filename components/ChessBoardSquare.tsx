@@ -1,5 +1,6 @@
 import { FC, RefObject } from "react";
 import { useDrag } from "../hooks/useDrag";
+import { useDrop } from "../hooks/useDrop";
 import { Square } from "../models";
 import { Piece } from "../models/piece";
 import styles from "../styles/ChessBoard.module.scss";
@@ -22,21 +23,17 @@ const ChessBoardSquare: FC<ChessBoardSquareProps> = ({
   onDrop,
   onClick,
 }) => {
-  const ref = useDrag({ onDragStart, onDragEnd });
+  const dragRef = useDrag<HTMLDivElement>({ onDragStart, onDragEnd });
+  const dropRef = useDrop<HTMLDivElement>({ onDrop });
 
   return (
     <div
+      ref={dropRef}
       className={`${styles.ChessBoardSquare} ${active ? styles.active : ""}`}
       onClick={() => (onClick ? onClick() : null)}
-      onDragEnter={(event) => event.preventDefault()}
-      onDragOver={(event) => event.preventDefault()}
-      onDrop={(event) => {
-        console.log(event);
-        onDrop ? onDrop() : null;
-      }}
     >
       {piece ? (
-        <div ref={ref} draggable="true" className={styles.ChessBoardPiece}>
+        <div ref={dragRef} draggable="true" className={styles.ChessBoardPiece}>
           <ChessBoardPiece
             name={piece.name}
             color={piece.isWhite ? "white" : "black"}

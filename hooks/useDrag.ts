@@ -8,14 +8,14 @@ export interface Drag {
   onDrop?: () => void;
 }
 
-const useDrag = ({
+const useDrag = <Element extends HTMLElement>({
   onDrag,
   onDragStart,
   onDragEnd,
   onDragOver,
   onDrop,
 }: Drag) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<Element>(null);
 
   useEffect(() => {
     const refElement = ref.current;
@@ -25,13 +25,10 @@ const useDrag = ({
     img.src =
       "data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
 
-    // DRAG
     const onDragEvent = (event: Event) => {
-      // console.log("Drag", event);
       if (event instanceof DragEvent) {
         if (event.target instanceof HTMLDivElement) {
           const div = event.target;
-          // console.log(event.screenX, event.screenY);
           const box = div.getBoundingClientRect();
           div.style.zIndex = "2";
           div.style.top = `${event.clientY - box.height / 2}px`;
@@ -41,7 +38,6 @@ const useDrag = ({
       onDrag ? onDrag() : null;
     };
 
-    // START
     const onDragStartEvent = (event: Event) => {
       console.log("Drag Start", event);
       event.stopPropagation();
@@ -51,6 +47,7 @@ const useDrag = ({
           event.dataTransfer?.setDragImage(img, 0, 0);
           event.dataTransfer.effectAllowed = "move";
         }
+
         if (event.target instanceof HTMLDivElement) {
           const div = event.target;
           const box = div.getBoundingClientRect();
@@ -61,6 +58,7 @@ const useDrag = ({
           // required to click trough the element once drag started
           requestAnimationFrame(() => {
             div.style.pointerEvents = "none";
+            div.style.cursor = "grabbing";
           });
         }
       }
@@ -88,27 +86,18 @@ const useDrag = ({
     // OVER
     const onDragOverEvent = (event: Event) => {
       event.preventDefault();
-      // console.log("Drag Over", event);
       onDragOver ? onDragOver() : null;
     };
-    // const onDropEvent = (event: Event) => {
-    //   console.log("Drop", event);
-
-    //   event.preventDefault();
-    //   onDrop ? onDrop() : null;
-    // };
 
     refElement?.addEventListener("dragstart", onDragStartEvent);
     refElement?.addEventListener("drag", onDragEvent);
     refElement?.addEventListener("dragend", onDragEndEvent);
     refElement?.addEventListener("dragover", onDragOverEvent);
-    // refElement?.addEventListener("drop", onDropEvent);
     return () => {
       refElement?.removeEventListener("dragstart", onDragStartEvent);
       refElement?.removeEventListener("drag", onDragEvent);
       refElement?.removeEventListener("dragend", onDragEndEvent);
       refElement?.removeEventListener("dragover", onDragOverEvent);
-      // refElement?.removeEventListener("drop", onDropEvent);
     };
   });
 

@@ -31,7 +31,7 @@ const useBoard = () => {
   // generate squared grid of chess board
   const board = grid.map((row, i) => row.map((col, j) => new Square(j, i)));
 
-  // set backranks
+  // set back rank pieces
   const whiteBackRank = getBackRank(true);
   const blackBackRank = getBackRank(false);
   board[7].forEach((col, index) => col.setPiece(blackBackRank[index]));

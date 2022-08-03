@@ -3,7 +3,7 @@
 ## Todo
 
 - [ ] On drag highlight
-- [ ] Diagonal Queen/Bishop movement block by pieces
+- [x] Diagonal Queen/Bishop movement block by pieces
 - [ ] End game
 - [ ] Players killed pieces list with value difference evaluating (example: +2 over oponent)
 - [ ] "Start with" color selection before starting the game

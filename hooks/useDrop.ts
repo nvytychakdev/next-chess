@@ -4,12 +4,14 @@ export interface Drop {
   onDrop?: () => void;
   onDragOver?: () => void;
   onDragEnter?: () => void;
+  onDragLeave?: () => void;
 }
 
 const useDrop = <Element extends HTMLElement>({
   onDrop,
   onDragEnter,
   onDragOver,
+  onDragLeave,
 }: Drop) => {
   const ref = useRef<Element>(null);
 
@@ -48,13 +50,26 @@ const useDrop = <Element extends HTMLElement>({
       event.preventDefault();
     };
 
+    /**
+     * Drag Leave Event.
+     * Prevent default event to allow elements to be dragged into `dragRef`
+     *
+     * @param event
+     */
+    const onDragLeaveEvent = (event: Event) => {
+      onDragLeave ? onDragLeave() : null;
+      event.preventDefault();
+    };
+
     refElement?.addEventListener("drop", onDropEvent);
     refElement?.addEventListener("dragover", onDragOverEvent);
     refElement?.addEventListener("dragenter", onDragEnterEvent);
+    refElement?.addEventListener("dragleave", onDragLeaveEvent);
     return () => {
       refElement?.removeEventListener("drop", onDropEvent);
       refElement?.removeEventListener("dragover", onDragOverEvent);
       refElement?.removeEventListener("dragenter", onDragEnterEvent);
+      refElement?.removeEventListener("dragleave", onDragLeaveEvent);
     };
   });
 

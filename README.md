@@ -2,7 +2,7 @@
 
 ## Todo
 
-- [ ] On drag highlight
+- [x] On drag highlight
 - [x] Diagonal Queen/Bishop movement block by pieces
 - [ ] End game
 - [ ] Players killed pieces list with value difference evaluating (example: +2 over oponent)

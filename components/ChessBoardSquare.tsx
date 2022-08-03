@@ -1,4 +1,4 @@
-import { FC, RefObject } from "react";
+import { FC, RefObject, useState } from "react";
 import { useDrag } from "../hooks/useDrag";
 import { useDrop } from "../hooks/useDrop";
 import { Square } from "../models";
@@ -23,13 +23,29 @@ const ChessBoardSquare: FC<ChessBoardSquareProps> = ({
   onDrop,
   onClick,
 }) => {
+  const [isDraggedOver, setDraggedOver] = useState(false);
   const dragRef = useDrag<HTMLDivElement>({ onDragStart, onDragEnd });
-  const dropRef = useDrop<HTMLDivElement>({ onDrop });
+  const dropRef = useDrop<HTMLDivElement>({
+    onDrop: () => {
+      setDraggedOver(false);
+      onDrop ? onDrop() : null;
+    },
+    onDragEnter: () => {
+      console.log("drag enter");
+      setDraggedOver(true);
+    },
+    onDragLeave: () => {
+      console.log("drag leave");
+      setDraggedOver(false);
+    },
+  });
 
   return (
     <div
       ref={dropRef}
-      className={`${styles.ChessBoardSquare} ${active ? styles.active : ""}`}
+      className={`${styles.ChessBoardSquare} ${active ? styles.active : ""}  ${
+        isDraggedOver ? styles.dragTarget : ""
+      }`}
       onClick={() => (onClick ? onClick() : null)}
     >
       {piece ? (
